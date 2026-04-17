@@ -1,6 +1,8 @@
 substitutions:
   # Voice Assistant Configuration
-  wake_word: okay_nabu
+  # Name must not be `wake_word`: that collides with the micro_wake_word
+  # on_wake_word_detected trigger variable passed to lambdas.
+  wake_word_primary_model: okay_nabu
   speaker_volume: 60%
   voice_assist_idle_phase_id: '1'
   voice_assist_listening_phase_id: '2'
@@ -90,7 +92,7 @@ micro_wake_word:
   vad:
     model: github://esphome/micro-wake-word-models/models/v2/vad.json@main
   models:
-    - model: ${wake_word}
+    - model: ${wake_word_primary_model}
       id: wake_model_okay_nabu
     - model: hey_mycroft
       id: wake_model_hey_mycroft
@@ -129,7 +131,19 @@ micro_wake_word:
                           condition:
                             voice_assistant.is_running:
                           then:
-                            voice_assistant.stop:
+                            - voice_assistant.stop:
+                            - delay: 200ms
+                            - if:
+                                condition:
+                                  switch.is_on: wake_sound
+                                then:
+                                  - script.execute:
+                                      id: play_sound
+                                      priority: true
+                                      sound_file: !lambda return id(wake_word_triggered_sound);
+                                  - delay: 300ms
+                            - voice_assistant.start:
+                                wake_word: !lambda return wake_word;
                           else:
                             - if:
                                 condition:
