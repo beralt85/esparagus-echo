@@ -201,15 +201,9 @@ voice_assistant:
                 - lambda: return id(wake_word_engine_location).current_option() == "On device";
             then:
               - wait_until:
-                  condition:
-                    - media_player.is_announcing:
-                  timeout: 0.5s
-              - wait_until:
-                  and:
-                    - not:
-                        voice_assistant.is_running:
-                    - not:
-                        speaker.is_playing: speaker_id
+                  not:
+                    media_player.is_announcing:
+              - delay: 500ms
               - lambda: id(va).set_use_wake_word(false);
               - micro_wake_word.start:
   on_error:

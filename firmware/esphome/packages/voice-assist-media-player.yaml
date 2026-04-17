@@ -36,9 +36,13 @@ media_player:
           decibel_reduction: 20
           duration: 0.0s
     on_idle:
+      - delay: 500ms
       - if:
           condition:
-            switch.is_on: use_wake_word
+            and:
+              - switch.is_on: use_wake_word
+              - not:
+                  voice_assistant.is_running:
           then:
             - script.execute: start_wake_word
             - script.execute: reset_led
