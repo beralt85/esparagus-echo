@@ -162,12 +162,12 @@ voice_assistant:
   auto_gain: 31dBFS
   on_client_connected:
     - lambda: id(init_in_progress) = false;
+    - delay: 2s
+    - script.execute: start_wake_word
     - if:
         condition:
           switch.is_on: use_wake_word
         then:
-          - delay: 2s
-          - script.execute: start_wake_word
           - lambda: id(voice_assistant_phase) = ${voice_assist_idle_phase_id};
           - script.execute: reset_led
         else:
@@ -285,11 +285,8 @@ script:
           then:
             - if:
                 condition:
-                  and:
-                    - not:
-                        voice_assistant.is_running:
-                    - lambda: |-
-                        return id(wake_word_engine_location).current_option() == "On device";
+                  lambda: |-
+                    return id(wake_word_engine_location).current_option() == "On device";
                 then:
                   - lambda: |-
                       id(va).set_use_wake_word(false);
