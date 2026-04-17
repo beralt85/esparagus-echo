@@ -28,8 +28,7 @@ media_player:
     on_announcement:
       - if:
           condition:
-            microphone.is_capturing:
-              id: voice_assistant_mic
+            microphone.is_capturing: voice_assistant_mic
           then:
             - script.execute: stop_wake_word
       - mixer_speaker.apply_ducking:
