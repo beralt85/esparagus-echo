@@ -65,9 +65,13 @@ light:
 
 micro_wake_word:
   id: mww
+  microphone:
+    microphone: voice_assistant_mic
+    channels: 0
+    gain_factor: 4
+  vad:
   models:
     - model: ${wake_word}
-  microphone: voice_assistant_mic
   on_wake_word_detected:
     - if:
         condition:
@@ -119,7 +123,11 @@ micro_wake_word:
 
 voice_assistant:
   id: va
-  microphone: voice_assistant_mic
+  micro_wake_word: mww
+  microphone:
+    microphone: voice_assistant_mic
+    channels: 0
+    gain_factor: 4
   media_player: voice_assistant_media_player
   use_wake_word: false
   auto_gain: 31dBFS

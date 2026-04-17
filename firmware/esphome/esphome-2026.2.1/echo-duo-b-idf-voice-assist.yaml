@@ -103,7 +103,7 @@ psram:
   ignore_not_found: false
 
 network:
-  enable_ipv6: true
+  enable_ipv6: false
 
 # ===== Packages =====
 packages:
@@ -123,7 +123,7 @@ packages:
 
   esparagus_echo:
     url: https://github.com/beralt85/esparagus-echo
-    ref: fix/voice-assist-wake
+    ref: fix/voice-assist-wakeword
     files:
       - firmware/esphome/packages/audio.yaml
       - firmware/esphome/packages/microphone.yaml
