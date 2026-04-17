@@ -26,10 +26,23 @@ media_player:
     buffer_size: 2000000         # INCREASED buffer (2MB vs default 1MB)
     task_stack_in_psram: true    # Use PSRAM for audio tasks
     on_announcement:
+      - if:
+          condition:
+            microphone.is_capturing:
+              id: voice_assistant_mic
+          then:
+            - script.execute: stop_wake_word
       - mixer_speaker.apply_ducking:
           id: media_mixing_input
           decibel_reduction: 20
           duration: 0.0s
+    on_idle:
+      - if:
+          condition:
+            switch.is_on: use_wake_word
+          then:
+            - script.execute: start_wake_word
+            - script.execute: reset_led
     on_state:
       if:
         condition:
